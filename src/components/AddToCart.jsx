@@ -1,4 +1,3 @@
-++ /workspaces/is-5600-week-07/src/components/AddToCart.jsx
 import React from 'react'
 import { useCart } from '../state/CartProvider'
 
