@@ -357,3 +357,17 @@ And that’s it! You’ve now completed your first lab assignment using GitHub a
 3. You can now view the project in the browser by clicking the "Application" port in the Ports panel.
 
 Follow the instructions in the previous sections to complete the lab.
+
+## Creating the `test` MongoDB database (quick)
+
+If you need the `test` database to exist in the Codespaces MongoDB instance (so it appears in Compass or other Mongo tools), run the helper script included in this repo. This script inserts a small document into `test.example`, which will create the database and collection.
+
+Run from the project root in the Codespace:
+
+```bash
+npm run create-test-db
+```
+
+Notes:
+- The script uses the default connection URI `mongodb://root:example@db:27017/test?authSource=admin`. If you use different credentials or a different host, set `MONGODB_URI` in the environment or update the script.
+- Databases only appear in Compass after they contain a collection and at least one document.
