@@ -49,6 +49,35 @@ const cartReducer = (state, action) => {
         ),
       }
       return updatedState
+    case UPDATE_ITEM_QUANTITY:
+      const { _id, quantity } = payload || {}
+      if (!_id) return state
+      // If quantity is zero or less, remove the item
+      if (quantity <= 0) {
+        return {
+          ...state,
+          itemsById: Object.entries(state.itemsById)
+            .filter(([key]) => key !== _id)
+            .reduce((obj, [key, value]) => {
+              obj[key] = value
+              return obj
+            }, {}),
+          allItems: state.allItems.filter((itemId) => itemId !== _id),
+        }
+      }
+      return {
+        ...state,
+        itemsById: {
+          ...state.itemsById,
+          [_id]: {
+            ...(state.itemsById[_id] || {}),
+            quantity,
+          },
+        },
+        allItems: state.allItems.includes(_id)
+          ? state.allItems
+          : [...state.allItems, _id],
+      }
     
     default:
       return state
@@ -71,12 +100,17 @@ const CartProvider = ({ children }) => {
 
   // todo Update the quantity of an item in the cart
   const updateItemQuantity = (productId, quantity) => {
-    // todo
+    dispatch({ type: UPDATE_ITEM_QUANTITY, payload: { _id: productId, quantity } })
   }
 
   // todo Get the total price of all items in the cart
   const getCartTotal = () => {
-    // todo
+    const items = getCartItems()
+    return items.reduce((sum, item) => {
+      const price = Number(item.price) || 0
+      const qty = Number(item.quantity) || 0
+      return sum + price * qty
+    }, 0)
   }
 
   const getCartItems = () => {
